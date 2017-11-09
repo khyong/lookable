@@ -17,10 +17,16 @@ required library
         2. In CMD window, "python -mpip install -U pip"
         3. In CMD window, "python -mpip install -U matplotlib"
     
-    - opencv 3.x: 
-        1. Download "opencv_python‑3.3.0‑cp36‑cp36m‑win_amd64.whl" file at http://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv
+    - opencv 3.x: It is used for computer vision
+        1. Download "opencv_python‑3.3.x‑cp36‑cp36m‑win_amd64.whl" file at http://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv
         2. Put This file in CMD path
-        3. In CMD window, "pip install opencv_python-3*win_amd64.whll"
+        3. In CMD window, "pip install opencv_python-3*win_amd64.whl"
+    
+    - opencv_contrib 3.x: It is used for some extar algorithm such as SIFT
+        1. Download "opencv_python‑3.3.x+contrib‑cp36‑cp36m‑win_amd64.whl" file at http://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv
+            => you should download the same version of opencv 3.x
+        2. Put This file in CMD path
+        3. In CMD window, "opencv_python‑3.3.*+contrib‑cp36‑cp36m‑win_amd64.whl"
   
 ---------------------------------------------------------------------------------------------------------------
 Related URL
