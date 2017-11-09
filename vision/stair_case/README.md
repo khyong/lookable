@@ -39,4 +39,9 @@ To do
     - SIFT: to detect user's foot, find keypoint of foot by using SIFT algorithm
     - https://docs.opencv.org/3.3.0/da/df5/tutorial_py_sift_intro.html
     - for using SIFT in opencv, download library: https://github.com/opencv/opencv_contrib/tree/master/modules/xfeatures2d
-testse
+
+algorithm
+    1. find descriptors of image and template using SIFT
+    2. match those descriptors using brute force
+    
+    url = https://docs.opencv.org/trunk/dc/dc3/tutorial_py_matcher.html
