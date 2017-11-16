@@ -45,3 +45,6 @@ algorithm
     2. match those descriptors using brute force
     
     url = https://docs.opencv.org/trunk/dc/dc3/tutorial_py_matcher.html
+
+
+additional url = https://www.pyimagesearch.com/2017/09/04/raspbian-stretch-install-opencv-3-python-on-your-raspberry-pi/
