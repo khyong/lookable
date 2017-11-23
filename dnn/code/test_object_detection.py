@@ -45,7 +45,7 @@ For the sake of simplicity we will use only 2 images
 if you want to test the code with your images, just add path to the images to the TEST_IMAGE_PATHS
 '''
 PATH_TO_TEST_IMAGES_DIR = '../data'
-TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, 'car_{}.png'.format(i)) for i in range(1, 3)]
+TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, 'bench_{}.png'.format(i)) for i in range(14, 15)]
 
 # Size, in inches, of the output images
 IMAGE_SIZE = (12, 8)
@@ -69,7 +69,13 @@ with detection_graph.as_default():
       image_np_expanded = np.expand_dims(image_np, axis=0)
       # Actual detection
       (boxes, scores, classes, num) = sess.run([detection_boxes, detection_scores, detection_classes, num_detections], feed_dict={image_tensor:image_np_expanded})
-      vis_util.visualize_boxes_and_labels_on_image_array(image_np, np.squeeze(boxes), np.squeeze(classes).astype(np.int32), np.squeeze(scores), category_index, use_normalized_coordinates=True, line_thickness=8)
-      plt.figure(figsize=IMAGE_SIZE)
+      temp_image, box_class = vis_util.visualize_boxes_and_labels_on_image_array(image_np, np.squeeze(boxes), np.squeeze(classes).astype(np.int32), np.squeeze(scores), category_index, use_normalized_coordinates=True, line_thickness=8)
+      fig = plt.figure(figsize=IMAGE_SIZE)
       plt.imshow(image_np)
-      plt.show()
+      #plt.show()
+      fig.savefig('../result/result_test.png')
+      for box, class_name in box_class.items():
+        print "========================================"
+        print class_name
+        print box
+        print "========================================"
