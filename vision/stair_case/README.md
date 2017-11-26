@@ -48,3 +48,5 @@ algorithm
 
 
 additional url = https://www.pyimagesearch.com/2017/09/04/raspbian-stretch-install-opencv-3-python-on-your-raspberry-pi/
+
+install opencv in raspberry pi 3 = http://webnautes.tistory.com/916
