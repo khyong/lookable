@@ -97,12 +97,15 @@ def objectDetection(image, cnt, direction, detection_graph, category_index):
       plt.imshow(image_np)
       #plt.show()
       fig.savefig('../' + direction + '/' + str(cnt) + '.png')
+      '''
       print "Success"
       for box, class_name in box_class.items():
         print "========================================"
         print class_name
         print box
         print "========================================"
+      '''
+      return box_class.items()
 
 def getImage(ip, port, direction, cnt, detection_graph, category_index):
   # global cnt
@@ -111,10 +114,10 @@ def getImage(ip, port, direction, cnt, detection_graph, category_index):
   f = cStringIO.StringIO(urllib.urlopen(URL).read())
   img = Image.open(f)
 
-  objectDetection(img, cnt, direction, detection_graph, category_index)
+  box_items = objectDetection(img, cnt, direction, detection_graph, category_index)
 
   cnt += 1
-  return cnt
+  return cnt, box_items
 
 if __name__=="__main__":
   main()
