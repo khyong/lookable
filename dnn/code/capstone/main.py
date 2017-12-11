@@ -17,7 +17,7 @@ def main():
   start = time.time()
   while True:
     CNT_PI[0] = getPiImage(0, CNT_PI[0], detection_graph, category_index)
-    CNT_PI[1] = getPiImage(1, CNT_PI[1], detection_graph, category_index)
+    #CNT_PI[1] = getPiImage(1, CNT_PI[1], detection_graph, category_index)
     #CNT_PI[2] = getPiImage(2, CNT_PI[2], detection_graph, category_index)
 
 def getPiImage(pi_num, cnt, detection_graph, category_index):

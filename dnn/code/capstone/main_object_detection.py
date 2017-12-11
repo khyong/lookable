@@ -23,7 +23,6 @@ NUM_CLASSES=90
 
 def loadModel():
   # load a (frozen) Tensorflow model into memory
-  # global detection_graph
   detection_graph = tf.Graph()
   with detection_graph.as_default():
     od_graph_def = tf.GraphDef()
@@ -37,7 +36,6 @@ def loadModel():
 
 def loadLabelMap():
   # loading label map
-  # global category_index
   label_map  = label_map_util.load_labelmap(PATH_TO_LABELS)
   categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
   category_index = label_map_util.create_category_index(categories)
@@ -50,9 +48,6 @@ def load_image_into_numpy_array(image):
 
 def objectDetection(image, cnt, direction, detection_graph, category_index):
   #detection
-  #global detection_graph
-  #global category_index
-
   # Size, in inches, of the output images
   IMAGE_SIZE = (12, 8)
 
@@ -77,11 +72,10 @@ def objectDetection(image, cnt, direction, detection_graph, category_index):
       fig = plt.figure(figsize=IMAGE_SIZE)
       plt.imshow(image_np)
       #plt.show()
-      fig.savefig('./' + direction + '/' + str(cnt) + '.jpg')
+      fig.savefig('./' + direction + '/result.jpg')
       return box_class.items()
 
 def getImage(ip, port, direction, cnt, detection_graph, category_index):
-  # global cnt
   URL = 'http://' + ip + ':' + str(port) + '/?action=snapshot'
 
   f = cStringIO.StringIO(urllib.urlopen(URL).read())
