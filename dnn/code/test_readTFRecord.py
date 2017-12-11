@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
-data_path = 'train.tfrecords' # address to save the hdf5 file
+data_path = './capstone/test/tfrecord/shoes.record' # address to save the hdf5 file
 
 with tf.Session() as sess:
   feature = {'train/image': tf.FixedLenFeature([], tf.string)}
