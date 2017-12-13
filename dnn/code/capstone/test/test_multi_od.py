@@ -2,7 +2,7 @@ import numpy as np
 import os
 import sys
 import tensorflow as tf
-from multiprocessing import Pool
+import multiprocessing as mp
 
 from collections import defaultdict
 from io import StringIO
@@ -24,18 +24,13 @@ PATH_TO_LABELS ='/home/hoyong/tensorflow/models/research/object_detection/data/m
 
 NUM_CLASSES=90
 
-def main():
-  detection_graph = loadModel()
-  category_index = loadLabelMap()
-  cnt = 0
-  ip = ''
-  port = 8666
-  start = time.time()
-  getImage(ip, port, 'front', cnt, detection_graph, category_index)
-  end = time.time()
-  print end - start
+detection_graph = None
 
-def loadModel():
+def load_image_into_numpy_array(image):
+  (im_width, im_height) = image.size
+  return np.array(image.getdata()).reshape((im_height, im_width, 3)).astype(np.uint8)
+
+def calTensor(name):
   # load a (frozen) Tensorflow model into memory
   detection_graph = tf.Graph()
   with detection_graph.as_default():
@@ -46,26 +41,19 @@ def loadModel():
     tf.import_graph_def(od_graph_def, name='')
 
   print "==== Load a Tensorflow model into memory===="
-  return detection_graph
 
-def loadLabelMap():
   # loading label map
   label_map  = label_map_util.load_labelmap(PATH_TO_LABELS)
   categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
   category_index = label_map_util.create_category_index(categories)
 
-  return category_index
+  sess = tf.Session(graph=detection_graph)
 
-def load_image_into_numpy_array(image):
-  (im_width, im_height) = image.size
-  return np.array(image.getdata()).reshape((im_height, im_width, 3)).astype(np.uint8)
-
-def objectDetection(image, cnt, direction, detection_graph, category_index):
-  #detection
+  image = Image.open('/home/hoyong/tensorflow/models/research/object_detection/test_images/image1.jpg')
   # Size, in inches, of the output images
   IMAGE_SIZE = (12, 8)
 
-  sess = tf.Session(graph=detection_graph)
+  '''
   # Each box represents a part of the image where a particular object was detected
   detection_boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
   # Each score represent how level of confidence for each of the objects
@@ -73,31 +61,42 @@ def objectDetection(image, cnt, direction, detection_graph, category_index):
   detection_scores = detection_graph.get_tensor_by_name('detection_scores:0')
   detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
   num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+  '''
   # Definite input and output Tensors for detection_graph
   image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
   # the array based representation of the image will be used later in order to prepare the result image with boxed and labels on it
   image_np = load_image_into_numpy_array(image)
   # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
   image_np_expanded = np.expand_dims(image_np, axis=0)
-  s = time.time()
-  boxes, scores, classes, num = sess.run([detection_boxes, detection_scores, detection_classes, num_detections], feed_dict={image_tensor:image_np_expanded})
-  e = time.time()
+  '''
+  boxes   = sess.run([detection_boxes], feed_dict={image_tensor:image_np_expanded})
+  scores  = sess.run([detection_scores], feed_dict={image_tensor:image_np_expanded})
+  classes = sess.run([detection_classes], feed_dict={image_tensor:image_np_expanded})
+  num     = sess.run([num_detections], feed_dict={image_tensor:image_np_expanded})
+  '''
+  tensor = detection_graph.get_tensor_by_name(name)
+  return sess.run([tensor], feed_dict={image_tensor:image_np_expanded})
+
+def main():
+  names = ['detection_boxes:0', 'detection_scores:0', 'detection_classes:0', 'num_detections:0']
+  '''
+  tp_boxes   = (image_tensor, image_np_expanded, names[0])
+  tp_scores  = (image_tensor, image_np_expanded, names[1])
+  tp_classes = (image_tensor, image_np_expanded, names[2])
+  tp_num     = (image_tensor, image_np_expanded, names[3])
+  '''
   # Actual detection
-  #s = time.time()
+  s = time.time()
+  p = mp.Pool(4)
+  result = p.imap(calTensor, names)
+  boxes = result.next()
+  scores = result.next()
+  classes = result.next()
+  num = result.next()
   _, box_class = vis_util.visualize_boxes_and_labels_on_image_array(image_np, np.squeeze(boxes), np.squeeze(classes).astype(np.int32), np.squeeze(scores), category_index, use_normalized_coordinates=True, line_thickness=8)
-  #e = time.time()
+  e = time.time()
   print str(e-s)
   return box_class.items()
-
-def getImage(ip, port, direction, cnt, detection_graph, category_index):
-  #URL = 'http://' + ip + ':' + str(port) + '/?action=snapshot'
-
-  img = Image.open('/home/hoyong/tensorflow/models/research/object_detection/test_images/image1.jpg')
-
-  box_items = objectDetection(img, cnt, direction, detection_graph, category_index)
-
-  cnt += 1
-  return cnt, box_items
 
 if __name__=="__main__":
   main()
