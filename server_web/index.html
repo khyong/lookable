@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+	  <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	  <script>
+	  var downNum=137;
+	  var downCnt=0;
+	  var front_count=1;
+	  var front_imgnum=63;
+
+	  $(document).ready(function(){
+ 		  $('#ftBtn').click(function(){
+			$.ajax({
+				url : './txts/front.txt',
+				success : function (data){
+					$("#frontTxt").html(data);
+				}
+			});
+		  });
+		  $('#dtBtn').click(function(){
+			$.ajax({
+				url : './txts/diag.txt',
+				success : function (data){
+					$("#diagTxt").html(data);
+				}
+			});
+		  });
+
+
+		  setInterval(function(){
+
+
+		},200);
+	  });
+
+ 	  function changeFrontImg(){
+		if(front_count>front_imgnum)
+		  front_count=1;
+		this.$('img#front').attr("src","");
+		front_count++;
+
+	  };
+
+	 
+	 function changeDownTxt(){
+	   $.ajax({
+	   	url: "./txts/down.txt",
+		dataType: "text",
+		timeout:200,
+		success: function(data){
+		  $("#downTxt").html(data);
+		},
+		error: function(xhr, message, errorThrown){
+		  var msg = xhr.status+" / "+message+" / "+errorThrown;
+		  $("#downTxt").html(msg);
+		}
+	   });
+	   setTimeout("changeDownTxt()",100);	   
+	 };
+
+
+</script>
+	<title>LOOKable</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body id="top">
+		<section id="banner" data-video="images/banner">
+			<div class="inner">
+				<header>
+					<h1>LOOKable</h1>
+				</header>
+				<a href="#main" class="more">Learn More</a>
+			</div>
+		</section>
+
+			<!-- Main -->
+				<div id="main">
+					<div class="inner">
+
+					<!-- Boxes -->
+						<div class="thumbnails">
+
+							<div class="box">
+
+								<br>
+								<h3>Front</h3>
+								<img class="image fit" id='front' src="http://13.125.11.55:8666/?action=stream"/></a>
+								<input type='button' id='ftBtn' value='Show Text'/>
+								<div class="inner" id="frontTxt">
+								</div>
+							</div>
+
+							<div class="box">
+								<br>
+								<h3>45' Side</h3>
+								<img class='image fit' id='diag' src="http://192.168.43.204:8666/?action=stream"/></a>
+								<input type='button' id='dtBtn' value='Show Text'/>
+								<div class="inner" id="diagTxt">
+							
+							</div>
+							</div>
+
+							<div class="box">
+								<br>
+								<h3>Down</h3>
+							    <img class="image fit" id='down'src="http://192.168.43.204:8666/?action=stream"/></a>
+						 
+							  </div>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+
+			<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+							<p class="copyright">&copy; LastChance</p>
+					</div>
+				</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.poptrox.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
