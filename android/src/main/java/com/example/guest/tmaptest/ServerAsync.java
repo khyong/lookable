@@ -39,6 +39,7 @@ public class ServerAsync extends AsyncTask<String, String, Void> {
         //txtView_receive.setText(values[0]);
         super.onProgressUpdate(values);
         ((MainActivity)MainActivity.context).setTextView(res);
+        ((MainActivity) MainActivity.context).TextToSpeech(textView.getText().toString());
     }
 
     @Override

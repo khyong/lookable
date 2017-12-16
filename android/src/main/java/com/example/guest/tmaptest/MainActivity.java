@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity
 
 
     public void setGpsManager(){
-        getGpsPermission();
+        getPermission();
         //tMapGps.setProvider(tMapGps.NETWORK_PROVIDER);  // 인터넷 이용 - 실내 전용
         tMapGps.setProvider(tMapGps.GPS_PROVIDER);    // gps이용
         tMapGps.setMinTime(0);
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity
         tMapGps.OpenGps();
     }
 
-    public void getGpsPermission(){
+    public void getPermission(){
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -168,19 +168,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("deprecation")
-    private void ttsUnder20(String text) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, map);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void ttsGreater21(String text) {
-        String utteranceId=this.hashCode() + "";
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
-    }
-
     public void setTmapView(){
         tMapView.setSKPMapApiKey(apiKey);
         tMapView.setCompassMode(true);
@@ -209,57 +196,56 @@ public class MainActivity extends AppCompatActivity
 
         if(!m_bTrackingMode){
             tMapView.setLocationPoint(location.getLongitude(),location.getLatitude());
-            TextToSpeech("목적지를 말하세요");
+            TextToSpeech("목적지");
             SpeechToText();
             m_bTrackingMode = true;
         }
-        else if(m_WalkingMode){
-            textView.append(point_idx+"번째 point \n");
+        else if(m_WalkingMode ){
+            textView.setText(point_idx+"번째 point \n");
 
             /* 다음 경로 안내 */
-            if(tMapPathData.getDistance(startpoint, tMapPathData.pathPoints.get(point_idx)) <= 10 && tMapPathData.directions.get(point_idx)>=0) {
-                textView.append("10 미만 : " + Double.toString(tMapPathData.getDistance(startpoint, tMapPathData.pathPoints.get(point_idx))) + "\n");
+            if(tMapPathData.getDistance(startpoint, tMapPathData.pathPoints.get(point_idx)) <= 5 ) {
+                textView.append("5 미만 : " + Double.toString(tMapPathData.getDistance(startpoint, tMapPathData.pathPoints.get(point_idx))) + "\n");
 
                 double preDir = tMapPathData.directions.get(point_idx);
-                double postDir = tMapPathData.directions.get(++point_idx);
+                double postDir = tMapPathData.directions.get(point_idx+1);
                 double drctDif = preDir - postDir;
 
                 if( drctDif > 180 ) drctDif = drctDif - 360 ;
+                else if( drctDif < -180 ) drctDif = drctDif + 360;
+                textView.append(Double.toString(drctDif)+"\n");
 
+
+                    //location.getBearing()
                 /* 오른쪽 회전 처리 */
-                if(drctDif < -45 && drctDif > -100) TextToSpeech("오른쪽");
-                
+                    if (drctDif < -45 && drctDif > -100) {
+                        textView.append("오른쪽\n");
+                        TextToSpeech("우측으로 가세요");
+                    } else if (drctDif > 45 && drctDif < 100) {
+                        textView.append("왼쪽\n");
+                        TextToSpeech("좌측으로 가세요");
+                    }
 
+                point_idx++;
             }
-
             /* 그 이외의 경우 */
-            else{
-                textView.append("10 넘음 : " + Double.toString(tMapPathData.getDistance(startpoint, tMapPathData.pathPoints.get(point_idx))) + "\n");
-
-                /* 경로로부터 직교거리 20m 이상 멀어지는 경우, 새로운 경로 탐색 */
-                if (tMapPathData.getDistance(
-                        startpoint,
-                        tMapPathData.GetOrthogonalPoint(tMapPathData.pathPoints.get(point_idx),
-                                tMapPathData.pathPoints.get(point_idx+1), startpoint)) > 20) {
-
-                    addText("직선거리 20 넘음 : "+Double.toString(tMapPathData.getDistance(
-                            startpoint,
-                            tMapPathData.GetOrthogonalPoint(tMapPathData.pathPoints.get(point_idx),
-                                    tMapPathData.pathPoints.get(point_idx+1), startpoint)))+"\n");
-                    TextToSpeech("새로 안내");
-                }
-            }
-        }
-    }
-
-    public boolean isConnected()
-    {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo net = cm.getActiveNetworkInfo();
-        if (net!=null && net.isAvailable() && net.isConnected()) {
-            return true;
-        } else {
-            return false;
+//            else{
+//
+//                //textView.append("10 넘음 : " + Double.toString(tMapPathData.getDistance(startpoint, tMapPathData.pathPoints.get(point_idx))) + "\n");
+//                /* 경로로부터 직교거리 20m 이상 멀어지는 경우, 새로운 경로 탐색 */
+//                if (tMapPathData.getDistance(
+//                        startpoint,
+//                        tMapPathData.GetOrthogonalPoint(tMapPathData.pathPoints.get(point_idx),
+//                                tMapPathData.pathPoints.get(point_idx+1), startpoint)) > 20) {
+//
+//                    addText("직선거리 20 넘음 : "+Double.toString(tMapPathData.getDistance(
+//                            startpoint,
+//                            tMapPathData.GetOrthogonalPoint(tMapPathData.pathPoints.get(point_idx),
+//                                    tMapPathData.pathPoints.get(point_idx+1), startpoint)))+"\n");
+//
+//                    TextToSpeech("새로 안내");
+//                }
+//            }
         }
     }
 
@@ -274,8 +260,9 @@ public class MainActivity extends AppCompatActivity
             tMapPathData.execute();
 
             //나중에 살리기
-            //sa = new ServerAsync(directionView);
-            //sa.executeOnExecutor(tMapPathData.THREAD_POOL_EXECUTOR);
+           // sa = new ServerAsync(directionView);
+           // sa.executeOnExecutor(tMapPathData.THREAD_POOL_EXECUTOR);
+
             TextToSpeech(destination);
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -284,7 +271,6 @@ public class MainActivity extends AppCompatActivity
     public void addText(String text) {
         textView.append(text);
     }
-
 
     public boolean findpath(){
         m_WalkingMode = true;
@@ -303,6 +289,20 @@ public class MainActivity extends AppCompatActivity
             ttsUnder20(text);
         }
     }
+
+    @SuppressWarnings("deprecation")
+    private void ttsUnder20(String text) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, map);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void ttsGreater21(String text) {
+        String utteranceId=this.hashCode() + "";
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+    }
+
     public void SpeechToText(){
 
         if (isConnected()) {
@@ -312,6 +312,17 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(intent, REQUEST_CODE);
         } else {
             Toast.makeText(getApplicationContext(), "Please Connect to Internet", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public boolean isConnected()
+    {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo net = cm.getActiveNetworkInfo();
+        if (net!=null && net.isAvailable() && net.isConnected()) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
