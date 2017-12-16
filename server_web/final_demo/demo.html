@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script>	
+	var frontnum=1326;
+	var frontcnt=0;
+	var diagnum=953;
+	var diagcnt=0;
+	var downnum=210;
+	var downcnt=0;
+	var frontstr;
+	var frontstrarr=[];
+	var diagstr;
+	var diagstrarr=[];
+
+	$(document).ready(function(){
+		getstring();
+
+		setInterval(function(){
+		  changeFrontImg();
+		  changeDiagImg();
+		},180);
+		setInterval(function(){
+		  changeDownImg();
+		},70);
+	});
+
+
+	function changeFrontImg(){
+		if(frontcnt==frontnum)
+		  frontcnt=0;
+		this.$('img#front').attr("src","./front/front_"+frontcnt+".jpg");
+		this.$('#ft').text(frontstrarr[frontcnt]);
+		frontcnt++;
+	};
+
+	function changeDiagImg(){
+		if(diagcnt==diagnum)
+		  diagcnt=0;
+		this.$('img#diag').attr("src","./diag/diag_"+diagcnt+".jpg");
+		this.$('#dt').text(diagstrarr[diagcnt]);
+		diagcnt++;
+	};
+	function getstring(){
+	var fso = new ActiveXObject("Scripting.FileSystemObject");    
+	var f1 = fso.OpenTextFile("front_text.txt", 1);
+	frontstr = f1.ReadAll();
+	f1.close();
+	frontstrarr=frontstr.split('\n');
+
+	var fso = new ActiveXObject("Scripting.FileSystemObject");    
+	var f2 = fso.OpenTextFile("diag_text.txt", 1);
+	diagstr = f2.ReadAll();
+	f2.close();
+	diagstrarr=diagstr.split('\n');
+		
+	};
+
+	function changeDownImg(){
+		if(downcnt==downnum)
+		  downcnt=0;
+		this.$('img#down').attr("src","./down/result"+downcnt+".jpg");
+		downcnt++;
+	};
+
+
+	</script>
+    <style>
+      .table1 {
+        width: 100%;
+	height: 100%;
+    	border: 1px solid #444444;
+    	border-collapse: collapse;
+	align: center;
+      }
+      .table2 {
+        width: 100%;
+	height: 100%;
+    	border: 1px solid #444444;
+    	border-collapse: collapse;
+	align: center;
+      }
+
+      .left-box {
+  	float: left;
+ 	width: 200px;
+	height: 400px;
+      }
+      .right-box {
+  	float: right;
+  	width: 1300px;
+       }
+      td{
+        width: 30%;
+	height: 100%;
+    	border: 1px solid #444444;
+    	border-collapse: collapse;
+	align: center;
+      }
+    </style>
+  </head>
+  <body>
+<div class='left-box'><img id ='walk' width="200" height="400" src="./walk.jpg"></img></div>
+<div class='right-box'>
+<table class='table1'>
+<tr>
+	<td align="center">front</td>
+	<td align="center">diag</td>
+	<td align="center">down</td>
+</tr>
+<tr>
+	<td><img id='front' width="400" height="330" src="./front.jpg"></td>
+	<td><img id='diag' width="400" height="330" src="./diag.jpg"></td>
+	<td><img id='down' width="400" height="330" src="./down.jpg"></td>
+</tr>
+</table>
+
+<table class='table2'>
+<tr>
+	<td align="center">Front Text</td>
+	<td align="center">Diag Text</td>
+	<td align="center"></td>
+</tr>
+<tr>
+	<td><text id='ft'>front text</text></td>
+	<td><text id='dt'>diag text</text></td>
+	<td><img height="150" /></td>
+</tr>
+</table>
+</div>
+
+  </body>
+</html>
