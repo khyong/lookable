@@ -1,5 +1,5 @@
-file [stair_case, foot_case, final_windows] are developed at windows
-file [final_rasp] is dveloped at raspberry pi
+    file [stair_case, foot_case, final_windows] are developed at windows
+    file [final_rasp] is dveloped at raspberry pi
 
 detail Environment
     - Windows 10 x64 bit
@@ -8,10 +8,10 @@ detail Environment
 ---------------------------------------------------------------------------------------------------------------
 Download (windows)
 
-Utility 
+Utility -
     - python 3.6.x: https://www.python.org/downloads/release/python-362/
   
-required library
+required library -
     - numpy: 
         1. Open CMD
         2. In CMD window, "pip install numpy"
@@ -43,7 +43,7 @@ required library
 ---------------------------------------------------------------------------------------------------------------
 Download (raspberry pi)
 
-required library    
+required library -
     - opencv 3.x and opencv_contrib 3.x: It is used for computer vision
         1. follow this URL: https://www.pyimagesearch.com/2015/03/30/accessing-the-raspberry-pi-camera-with-opencv-and-python/
         
@@ -56,12 +56,12 @@ required library
         2. In terminal, "pip install -U scikit-learn"
   
 ---------------------------------------------------------------------------------------------------------------
-Description
+Description - 
     - SIFT: to detect user's foot, find keypoint of foot by using SIFT algorithm
     - https://docs.opencv.org/3.3.0/da/df5/tutorial_py_sift_intro.html
     - for using SIFT in opencv, download library: https://github.com/opencv/opencv_contrib/tree/master/modules/xfeatures2d
 
-algorithm
+algorithm - 
     1. find descriptors of image and template using SIFT
     2. match those descriptors using brute force
     
@@ -73,7 +73,7 @@ additional url = https://www.pyimagesearch.com/2017/09/04/raspbian-stretch-insta
 install opencv in raspberry pi 3 = http://webnautes.tistory.com/916
 
 ---------------------------------------------------------------------------------------------------------------
-Related URL abour computer vision
+Related URL abour computer vision - 
     - Edge detection: http://docs.opencv.org/trunk/da/d22/tutorial_py_canny.html
   
     - Image filtering: http://docs.opencv.org/3.1.0/d4/d13/tutorial_py_filtering.html
