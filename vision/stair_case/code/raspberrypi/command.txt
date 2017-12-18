@@ -1,3 +1,0 @@
-take video: raspivid -o "name" -t "number"(milli second)
-
-play video: omxplayer -g "name"
