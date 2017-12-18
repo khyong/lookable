@@ -1,7 +1,46 @@
+Description
+
     file [stair_case, foot_case, final_windows] are developed at windows
+
+    stair: it is maked for finding stair
+        
+        1. stair_case/source: reference code
+        2. stair_case/basic: about image processing, basic edge detection, sift (not used for final code)
+        3. stair_case/represent Stair: failed algorithm
+        4. stair_case/using contour: automatically edge detect and draw contour box
+        5. stair_case/voting: about voting algorithm, it is used to find stair(final algorithm)
+        6. stair_case/voting_edge_detection.py: code for detecting stairs
+        
+    foot: it is maked for finding foot
+    
+        1. foot_case/source: about image processing
+        2. foot_case/represent: failed algorithm
+        3. foot_case/voting: failed algorithm
+        4. foot_case/segmentation: failed algorithm
+        5. foot_case/tracking: about tracking, it is provided at OpenCV
+        6. foot_case/multi_trackingl.py: code for tracking foot
+        
+    final_windows: it is maked for finding foot and stair
+    
+        1. final_windows/source: about image processing
+        2. final_windows/previous_version: previous version (try to combine algorithms)
+        3. final_windows/final.py: code for detecting stairs and tracking foots
+    
     file [final_rasp] is dveloped at raspberry pi
+    
+    final_rasp: it is maked for raspberry pi environment and added buzzer system
+    
+        1. final_rasp/basic: about controlling buzzer and camera
+        2. final_rasp/finalRasp.py: code for detecting stairs and tracking foots. finally, alter warning by raspberry pi
+
+used algorithm
+
+    1. find stair: preprocessing, Canny Edge Detection, voting, k-means
+    2. track foot: tracking
+    3. alert: if shoe is over next stair, alert
 
 detail Environment
+
     - Windows 10 x64 bit
     - Raspberry pi 3 b+
 
@@ -48,7 +87,7 @@ Download (raspberry pi)
 required library
 
     - opencv 3.x and opencv_contrib 3.x: It is used for computer vision
-        1. follow this URL: https://www.pyimagesearch.com/2015/03/30/accessing-the-raspberry-pi-camera-with-opencv-and-python/
+        1. follow this URL:  https://www.pyimagesearch.com/2017/09/04/raspbian-stretch-install-opencv-3-python-on-your-raspberry-pi/
         
     - scipy: To use k-means algorithm, must install scipy
         1. Open terminal
@@ -58,25 +97,6 @@ required library
         1. Open terminal
         2. In terminal, "pip install -U scikit-learn"
   
----------------------------------------------------------------------------------------------------------------
-Description
-
-    - SIFT: to detect user's foot, find keypoint of foot by using SIFT algorithm
-    - https://docs.opencv.org/3.3.0/da/df5/tutorial_py_sift_intro.html
-    - for using SIFT in opencv, download library: https://github.com/opencv/opencv_contrib/tree/master/modules/xfeatures2d
-
-algorithm
-
-    1. find descriptors of image and template using SIFT
-    2. match those descriptors using brute force
-    
-    url = https://docs.opencv.org/trunk/dc/dc3/tutorial_py_matcher.html
-
-
-additional url = https://www.pyimagesearch.com/2017/09/04/raspbian-stretch-install-opencv-3-python-on-your-raspberry-pi/
-
-install opencv in raspberry pi 3 = http://webnautes.tistory.com/916
-
 ---------------------------------------------------------------------------------------------------------------
 Related URL abour computer vision
 
